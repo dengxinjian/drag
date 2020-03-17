@@ -13,6 +13,25 @@
     <!-- whatever stylesheets ends -->
     <!-- inject:css -->
     <!-- endinject -->
+    <style>
+      .dialogContainer {
+        position: fixed;
+        left: 20px;
+        top: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+      .dialogTitle {
+        font-size: 16px;
+        text-align: center;
+        line-height: 40px;
+        cursor: move;
+      }
+      .dialogVideo {
+        width: 500px;
+        height: 300px;
+        background-color: #000;
+      }
+    </style>
   </head>
   <body>
     <button
@@ -23,11 +42,48 @@
     >
       Hooray !!
     </button>
+    <div class="dialogContainer" id="videoContainer">
+      <div class="dialogTitle" id="dialogTitle">实时视频</div>
+      <div class="dialogVideo"></div>
+    </div>
     <!-- whatever js starts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <!-- whatever js ends -->
     <!-- inject:js -->
     <!-- endinject -->
+    <script>
+      window.onload = function() {
+        var offsetX,
+          offsetY,
+          isMoving = false;
+        function videoMouseDown(e) {
+          offsetX = parseFloat(e.offsetX);
+          offsetY = parseFloat(e.offsetY);
+          isMoving = true;
+        }
+        function videoMouseMove(e) {
+          if (!isMoving) {
+            return;
+          }
+          let el = document.getElementById("videoContainer");
+          const posLeft = parseFloat(e.clientX) - offsetX;
+          const posTop = parseFloat(e.clientY) - offsetY;
+          el.style.left = posLeft + "px";
+          el.style.top = posTop + "px";
+        }
+        function videoMouseUp() {
+          isMoving = false;
+        }
+        function videoMouseOut() {
+          isMoving = false;
+        }
+        var title = document.getElementById("dialogTitle");
+        title.onmousedown = videoMouseDown;
+        title.onmousemove = videoMouseMove;
+        title.onmouseup = videoMouseUp;
+        title.onmouseout = videoMouseOut;
+      };
+    </script>
   </body>
 </html>
